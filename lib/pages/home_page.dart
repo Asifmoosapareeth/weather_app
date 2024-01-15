@@ -50,10 +50,7 @@ class _HomePageState extends State<HomePage> {
         height: MediaQuery.of(context).size.height,
         child: Column(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _locationHeader(),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.03,
             ),
@@ -74,9 +71,28 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.06,
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
+            _locationHeader(),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
             _dateTimeInfo(),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.04,
+            ),
+            Column(
+              children: [
+                _currentTemp(),
+                Row(
+                  children: [
+                    Expanded(child: SizedBox()),
+                    _weatherDescription(),
+                  ],
+                )
+              ],
+            ),
+            // _dateTimeInfo(),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.05,
             ),
@@ -84,11 +100,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
-            _currentTemp(),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-            _extraInfo(),
+            _details(),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
@@ -146,12 +158,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _weatherIcon() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
+    return Container(
           height: MediaQuery.of(context).size.height * 0.20,
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -159,38 +166,44 @@ class _HomePageState extends State<HomePage> {
                   "http://openweathermap.org/img/wn/${_weather?.weatherIcon}@4x.png"),
             ),
           ),
-        ),
-        Text(
-          _weather?.weatherDescription ?? "",
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-          ),
-        ),
-      ],
-    );
+        );
   }
+ Widget _weatherDescription(){
+   return Padding(
+     padding: const EdgeInsets.only(right: 15),
+     child: Text(
+       _weather?.weatherDescription ?? "",
+       style: const TextStyle(
+         color: Colors.black,
+         fontSize: 20,
+       ),
+     ),
+   );
+ }
 
   Widget _currentTemp() {
-    return Text(
-      "${_weather?.temperature?.celsius?.toStringAsFixed(0)}° C",
-      style: const TextStyle(
-        color: Colors.black,
-        fontSize: 90,
-        fontWeight: FontWeight.w500,
+    return Padding(
+      padding: const EdgeInsets.only(left: 15),
+      child: Text(
+        "${_weather?.temperature?.celsius?.toStringAsFixed(0)}° C",
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 90,
+          fontWeight: FontWeight.w500,
+        ),
       ),
     );
   }
 
-  Widget _extraInfo() {
+  Widget _details() {
     return Padding(
       padding: const EdgeInsets.only(left: 50,right: 50),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           WeatherItems(weather: 'wind speed', value: '${_weather?.windSpeed}', imageUrl: MyImages.wind, unit: 'km/h', conversionFactor: 3.6,),
-          WeatherItems(weather: 'Humidity', value: '${_weather?.humidity}', imageUrl: MyImages.humidity, unit: '', conversionFactor: 1,),
-          WeatherItems(weather: 'Cloudiness', value: '${_weather?.cloudiness}', imageUrl: MyImages.wind, unit: '', conversionFactor: 1,),
+          WeatherItems(weather: 'Humidity', value: '${_weather?.humidity}', imageUrl: MyImages.humidity, unit: '%', conversionFactor: 1,),
+          WeatherItems(weather: 'Cloudiness', value: '${_weather?.cloudiness}', imageUrl: MyImages.cloud, unit: '%', conversionFactor: 1,),
 
 
         ],
